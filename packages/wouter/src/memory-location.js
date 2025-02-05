@@ -11,8 +11,17 @@ export const memoryLocation = ({
   static: staticLocation,
   record,
 } = {}) => {
-  let currentPath = path + (searchPath && (path.split("?")[1] ? "&" : "?")) + searchPath;
-  let currentSearch = currentPath.split("?")[1] || "";
+  let currentPath = path.split("?")[0];
+  let currentSearch = "";
+
+  if (path.split("?")[1]) {
+    currentSearch = path.split("?")[1];
+  }
+
+  if (searchPath) {
+    currentSearch += (currentSearch && "&") + searchPath;
+  }
+
   const history = [currentPath];
   const emitter = mitt();
 

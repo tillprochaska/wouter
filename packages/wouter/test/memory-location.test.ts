@@ -25,7 +25,6 @@ it("should support initial path", () => {
 
 it("should support initial path with query", () => {
   const { searchHook } = memoryLocation({ path: "/test-case?foo=bar" });
-  // const { searchHook } = memoryLocation({ path: "/test-case", searchPath: "foo=bar" });
 
   const { result, unmount } = renderHook(() => searchHook());
   const [value] = result.current;
@@ -34,8 +33,44 @@ it("should support initial path with query", () => {
   unmount();
 });
 
+it("should support initial search path", () => {
+  const { searchHook } = memoryLocation({ path: "/test-case", searchPath: "foo=bar" });
+
+  const { result, unmount } = renderHook(() => searchHook());
+  const [value] = result.current;
+
+  expect(value).toBe("foo=bar");
+  unmount();
+});
+
+it("should support initial path with query and search path", () => {
+  const { hook, searchHook } = memoryLocation({ path: "/test-case?foo=bar", searchPath: "bar=baz" });
+
+  const { result: locationResult, unmount: unmountLocation } = renderHook(() => hook());
+  const [location] = locationResult.current;
+
+  const { result: searchResult, unmount: unmountSearch } = renderHook(() => searchHook());
+  const [search] = searchResult.current;
+
+  expect(location).toBe("/test-case");
+  expect(search).toBe("foo=bar&bar=baz");
+
+  unmountLocation();
+  unmountSearch();
+});
+
 it('should return location hook that has initial path "/" by default', () => {
   const { hook } = memoryLocation();
+
+  const { result, unmount } = renderHook(() => hook());
+  const [value] = result.current;
+
+  expect(value).toBe("/");
+  unmount();
+});
+
+it("should return location hook that strips query from path", () => {
+  const { hook } = memoryLocation({ path: "/?foo=bar" });
 
   const { result, unmount } = renderHook(() => hook());
   const [value] = result.current;
