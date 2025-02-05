@@ -101,16 +101,24 @@ it("should return standalone `navigate` method", () => {
   unmount();
 });
 
-it("should return location hook that supports navigation", () => {
-  const { hook } = memoryLocation();
+it("should return location and search hooks that supports navigation", () => {
+  const { hook, searchHook } = memoryLocation();
 
-  const { result, unmount } = renderHook(() => hook());
+  const { result: locationResult, unmount: unmountLocation } = renderHook(() => hook());
+  const { result: searchResult, unmount: unmountSearch } = renderHook(() => searchHook());
 
-  act(() => result.current[1]("/location"));
+  act(() => locationResult.current[1]("/location?foo=bar"));
 
-  const [value] = result.current;
-  expect(value).toBe("/location");
-  unmount();
+  expect(locationResult.current[0]).toBe("/location");
+  expect(searchResult.current[0]).toBe("foo=bar");
+
+  act(() => locationResult.current[1]("/location"));
+
+  expect(locationResult.current[0]).toBe("/location");
+  expect(searchResult.current[0]).toBe("");
+
+  unmountLocation();
+  unmountSearch();
 });
 
 it("should record all history when `record` option is provided", () => {

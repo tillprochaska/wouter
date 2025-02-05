@@ -34,7 +34,7 @@ export const memoryLocation = ({
       }
     }
 
-    currentPath = path;
+    currentPath = path.split("?")[0];
     currentSearch = path.split("?")[1] || "";
     emitter.emit("navigate", path);
   };
