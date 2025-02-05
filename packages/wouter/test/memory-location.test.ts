@@ -120,24 +120,24 @@ it("should record all history when `record` option is provided", () => {
     hook,
     history,
     navigate: standalone,
-  } = memoryLocation({ record: true, path: "/test" });
+  } = memoryLocation({ record: true, path: "/test?foo=bar" });
 
   const { result, unmount } = renderHook(() => hook());
 
-  act(() => standalone("/standalone"));
-  act(() => result.current[1]("/location"));
+  act(() => standalone("/standalone?foo=bar"));
+  act(() => result.current[1]("/location?foo=bar"));
 
   expect(result.current[0]).toBe("/location");
 
-  expect(history).toStrictEqual(["/test", "/standalone", "/location"]);
+  expect(history).toStrictEqual(["/test?foo=bar", "/standalone?foo=bar", "/location?foo=bar"]);
 
-  act(() => standalone("/standalone", { replace: true }));
+  act(() => standalone("/standalone?bar=baz", { replace: true }));
 
-  expect(history).toStrictEqual(["/test", "/standalone", "/standalone"]);
+  expect(history).toStrictEqual(["/test?foo=bar", "/standalone?foo=bar", "/standalone?bar=baz"]);
 
-  act(() => result.current[1]("/location", { replace: true }));
+  act(() => result.current[1]("/location?bar=baz", { replace: true }));
 
-  expect(history).toStrictEqual(["/test", "/standalone", "/location"]);
+  expect(history).toStrictEqual(["/test?foo=bar", "/standalone?foo=bar", "/location?bar=baz"]);
 
   unmount();
 });

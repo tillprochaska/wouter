@@ -22,7 +22,7 @@ export const memoryLocation = ({
     currentSearch += (currentSearch && "&") + searchPath;
   }
 
-  const history = [currentPath];
+  const history = [currentPath + (currentSearch && "?") + currentSearch];
   const emitter = mitt();
 
   const navigateImplementation = (path, { replace = false } = {}) => {
