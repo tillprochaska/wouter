@@ -25,21 +25,17 @@ it("should support initial path", () => {
 
 it("should support initial path with query", () => {
   const { searchHook } = memoryLocation({ path: "/test-case?foo=bar" });
-
   const { result, unmount } = renderHook(() => searchHook());
-  const [value] = result.current;
 
-  expect(value).toBe("foo=bar");
+  expect(result.current).toBe("foo=bar");
   unmount();
 });
 
 it("should support initial search path", () => {
   const { searchHook } = memoryLocation({ path: "/test-case", searchPath: "foo=bar" });
-
   const { result, unmount } = renderHook(() => searchHook());
-  const [value] = result.current;
 
-  expect(value).toBe("foo=bar");
+  expect(result.current).toBe("foo=bar");
   unmount();
 });
 
@@ -50,7 +46,7 @@ it("should support initial path with query and search path", () => {
   const [location] = locationResult.current;
 
   const { result: searchResult, unmount: unmountSearch } = renderHook(() => searchHook());
-  const [search] = searchResult.current;
+  const search = searchResult.current;
 
   expect(location).toBe("/test-case");
   expect(search).toBe("foo=bar&bar=baz");
@@ -81,11 +77,9 @@ it("should return location hook that strips query from path", () => {
 
 it('should return search hook that has initial query "" by default', () => {
   const { searchHook } = memoryLocation();
-
   const { result, unmount } = renderHook(() => searchHook());
-  const [value] = result.current;
 
-  expect(value).toBe("");
+  expect(result.current).toBe("");
   unmount();
 });
 
@@ -110,12 +104,12 @@ it("should return location and search hooks that supports navigation", () => {
   act(() => locationResult.current[1]("/location?foo=bar"));
 
   expect(locationResult.current[0]).toBe("/location");
-  expect(searchResult.current[0]).toBe("foo=bar");
+  expect(searchResult.current).toBe("foo=bar");
 
   act(() => locationResult.current[1]("/location"));
 
   expect(locationResult.current[0]).toBe("/location");
-  expect(searchResult.current[0]).toBe("");
+  expect(searchResult.current).toBe("");
 
   unmountLocation();
   unmountSearch();
