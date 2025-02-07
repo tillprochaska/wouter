@@ -51,7 +51,7 @@ export const memoryLocation = ({
     navigate,
   ];
 
-  const useMemoryQuery = () => useSyncExternalStore(subscribe, () => currentSearch);
+  const useMemorySearch = () => useSyncExternalStore(subscribe, () => currentSearch);
 
   function reset() {
     // clean history array with mutation to preserve link
@@ -62,7 +62,7 @@ export const memoryLocation = ({
 
   return {
     hook: useMemoryLocation,
-    searchHook: useMemoryQuery,
+    searchHook: useMemorySearch,
     navigate,
     history: record ? history : undefined,
     reset: record ? reset : undefined,
